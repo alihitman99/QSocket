@@ -8,17 +8,19 @@
 
 class ChatClient : public QObject {
     Q_OBJECT
-    QTcpSocket socket;
 
 public:
     ChatClient(QObject *parent = nullptr);
+    Q_INVOKABLE void connectToServer();
+    Q_INVOKABLE void sendMessage(const QString &msg);
 
-    void connectToServer();
-
-private slots:
-    void onConnected();
-
+signals:
+    void messageReceived(const QString &msg);
+private slots:    
     void onReadyRead();
+
+private:
+    QTcpSocket socket;
 };
 
 #endif // CHATCLIENT_H
