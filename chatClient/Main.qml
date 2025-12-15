@@ -9,6 +9,7 @@ Window {
     visible: true
     title: qsTr("Client Window")
     x: Screen.width / 2
+    y: 20
     color: "#5D5D5D"
 
     TextArea {
