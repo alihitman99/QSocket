@@ -3,6 +3,7 @@
 #include <QQmlContext>
 #include <QCoreApplication>
 #include "chatclient.h"
+#include "chatClientModel.h"
 
 
 int main(int argc, char *argv[]) {
@@ -11,7 +12,11 @@ int main(int argc, char *argv[]) {
 
     ChatClient client;
     client.connectToServer();
+
+    ChatClientModel chatModel;
+
     engine.rootContext()->setContextProperty("client", &client);
+    engine.rootContext()->setContextProperty("chatModel", &chatModel);
 
 
     QObject::connect(

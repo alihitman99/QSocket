@@ -26,7 +26,8 @@ Window {
         Button{
             text: "➤"
             onClicked: {
-                server.sendToAll(textField)
+                server.sendToAll(textField.text)
+                listText.text += "Me: " + textField.text + "\n"
             }
         }
     }

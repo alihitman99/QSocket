@@ -7,16 +7,49 @@ Window {
     width: Screen.width / 2
     height: 600
     visible: true
-    title: qsTr("Client Window")
+    title: client.clientName
     x: Screen.width / 2
     color: "#5D5D5D"
 
-    TextArea {
-        id: chatBox
-        readOnly: true
-        wrapMode: TextArea.Wrap
-        height: 300
+    // TextArea {
+    //     id: chatBox
+    //     readOnly: true
+    //     wrapMode: TextArea.Wrap
+    //     height: 300
+    // }
+
+    ListView {
+        id: chatListView
+        model: chatModel
+        clip: true
+        anchors.fill: parent
+
+        delegate: Item {
+            width: chatListView.width
+            height: bubble.implicitHeight + 10
+
+            Rectangle {
+                id: bubble
+                radius: 10
+                color: isClient ? "#d4ffd4" : "#e0e0ff"
+
+                anchors.margins: 10
+                anchors.right: isClient ? parent.right : undefined
+                anchors.left: isClient ? undefined : parent.left
+
+                Text {
+                    id: txt
+                    text: msgRole
+                    padding: 8
+                    wrapMode: Text.Wrap
+                }
+
+                implicitWidth: Math.min(txt.implicitWidth + 20, chatListView.width * 0.75)
+                implicitHeight: txt.implicitHeight + 10
+            }
+        }
     }
+
 
     RowLayout{
         anchors.bottom: parent.bottom
@@ -28,15 +61,27 @@ Window {
         Button{
             text: "➤"
             onClicked: {
-                client.sendMessage(textField.text)
+                // client.sendMessage(textField.text)
+                // chatBox.text += "Me: " + textField.text + "\n"
+                chatModel.addItem(textField.text, true)
+                chatListView.positionViewAtEnd()
+
             }
         }
     }
 
-    Connections{
+    Connections {
         target: client
         function onMessageReceived(msg) {
-            chatBox.text += msg + "\n"
+            chatModel.addMessage(msg, false)
+            chatListView.positionViewAtEnd()
         }
     }
+
+    // Connections{
+    //     target: client
+    //     function onMessageReceived(msg) {
+    //         chatBox.text += msg + "\n"
+    //     }
+    // }
 }

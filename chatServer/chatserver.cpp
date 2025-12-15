@@ -28,10 +28,11 @@ void ChatServer::onNewConnection() {
         qDebug() << "Received:" << QString::fromUtf8(msg);
         // socket->write("Hi client, I got your message!");
 
-        for (QTcpSocket *c : clients) {
-            if (c->state() == QAbstractSocket::ConnectedState)
-                c->write(msg);
-        }
+        // send to all clients msg
+        // for (QTcpSocket *c : clients) {
+        //     if (c->state() == QAbstractSocket::ConnectedState)
+        //         c->write(msg);
+        // }
     });
 
     // connect(socket, &QTcpSocket::disconnected, [socket]() {

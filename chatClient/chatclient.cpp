@@ -1,7 +1,9 @@
 #include "chatclient.h"
 
 ChatClient::ChatClient(QObject *parent) : QObject(parent) {
+
     connect(&socket, &QTcpSocket::readyRead, this, &ChatClient::onReadyRead);
+
     // connect(&socket, &QTcpSocket::disconnected, this, []() {
     //     qDebug() << "Disconnected from server.";
     //     QCoreApplication::quit();
@@ -10,6 +12,11 @@ ChatClient::ChatClient(QObject *parent) : QObject(parent) {
 
 void ChatClient::connectToServer() {
     socket.connectToHost("127.0.0.1", 1234);
+    clientInfo.id = QUuid::createUuid().toString(QUuid::WithoutBraces);
+    clientInfo.name = "Client_" + clientInfo.id.right(4);
+    setClientName(clientInfo.name);
+
+
 }
 
 void ChatClient::sendMessage(const QString &msg)
@@ -30,5 +37,24 @@ void ChatClient::onReadyRead() {
     QString msg = QString::fromUtf8(socket.readAll());
     // qDebug() << "server say: " << msg;
     emit messageReceived(msg);
+
+    // if(socket.state() == QAbstractSocket::ConnectedState){
+    //     socket.write(msg.toUtf8());
+    //     socket.flush();
+    // }
     // socket.disconnectFromHost();
+}
+
+
+QString ChatClient::clientName() const
+{
+    return m_clientName;
+}
+
+void ChatClient::setClientName(const QString &newClientName)
+{
+    if (m_clientName == newClientName)
+        return;
+    m_clientName = newClientName;
+    emit clientNameChanged();
 }

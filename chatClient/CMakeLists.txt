@@ -18,6 +18,7 @@ qt_add_qml_module(appclient
     QML_FILES
         Main.qml
         SOURCES chatclient.h chatclient.cpp
+        SOURCES chatClientModel.h chatClientModel.cpp
 )
 
 target_link_libraries(appclient PRIVATE Qt6::Core Qt6::Network Qt6::Quick)
